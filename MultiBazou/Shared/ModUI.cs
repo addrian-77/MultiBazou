@@ -290,7 +290,7 @@ namespace MultiBazou.Shared
                         }
 
                         StartGame();
-                        showModUI = false;
+                        showModUI = true;
                     }
                 }
 
