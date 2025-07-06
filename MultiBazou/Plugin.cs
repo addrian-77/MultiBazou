@@ -103,22 +103,22 @@ namespace MultiBazou
         {
             if (!isModInitialized) return;
 
-            if (GameData.dataInitialized)
+            if (Input.GetKeyDown(KeyCode.End))
             {
-                if (Client.instance.isConnected)
+                if (ModUI.Instance != null)
                 {
-                    if (ModSceneManager.IsInGame())
-                        ClientData.instance.UpdateClient();
+                    ModUI.Instance.showModUI = !ModUI.Instance.showModUI;
+                    ModUI.Instance.wasinitialized = false;
+
+                    Plugin.log.LogInfo("[Plugin] Toggled mod UI: " + ModUI.Instance.showModUI);
                 }
             }
 
-            if (ServerData.isRunning)
-            {
-                if (Server.Clients.Count == 0)
-                {
-                    Server.Stop();
-                }
-            }
+            if (GameData.dataInitialized && Client.instance.isConnected && ModSceneManager.IsInGame())
+                ClientData.instance.UpdateClient();
+
+            if (ServerData.isRunning && Server.Clients.Count == 0)
+                Server.Stop();
 
             ThreadManager.UpdateThread();
         }
@@ -131,25 +131,6 @@ namespace MultiBazou
                 {
                     ServerSend.DisconnectClient(id, "Server is shutting down.");
                 }
-            }
-        }
-
-        private void OnGUI()
-        {
-            if (!isModInitialized && !Client.instance.isConnected) return;
-            if (!ModSceneManager.IsInMenu())
-            {
-                log.LogInfo("not in menu");
-                return;
-            }
-            if (!GuiInitialized)
-            {
-                if (Event.current.Equals(Event.KeyboardEvent(ConfigModUiToggle.Value)))
-                    ModUI.Instance.showModUI = !ModUI.Instance.showModUI;
-                log.LogInfo("attempted to show UI " + ModUI.Instance.showModUI + " bool value");
-                ModUI.Instance.wasinitialized = false;
-                modUI.OnGUI();
-                GuiInitialized = true;
             }
         }
     }

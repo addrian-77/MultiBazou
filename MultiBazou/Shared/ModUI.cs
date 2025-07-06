@@ -38,46 +38,48 @@ namespace MultiBazou.Shared
             window = GUIWindow.Main;
         }
 
-        public void OnGUI()
+    public void OnGUI()
+    {
+        if (!showModUI) return;
+
+        Plugin.log.LogInfo("reached modui");
+        Plugin.log.LogInfo("modui bool value is " + Instance.showModUI);
+
+        if (!wasinitialized)
         {
-            if (!wasinitialized)
+            Plugin.log.LogInfo("attempt to change showmodui");
+            Instance.showModUI = true;
+            Plugin.log.LogInfo("modui bool value is " + Instance.showModUI);
+
+            Initialize();
+            wasinitialized = true;
+        }
+
+        if (ModSceneManager.IsInMenu())
+        {
+            Plugin.log.LogInfo("entered if");
+            switch (window)
             {
-                Plugin.log.LogInfo("reached modui");
-                Plugin.log.LogInfo("modui bool value is " + Instance.showModUI);
-                Plugin.log.LogInfo("attempt to change showmodui");
-                Instance.showModUI = true;
-                Plugin.log.LogInfo("modui bool value is " + Instance.showModUI);
-                
-                if (showModUI)
-                {
-                    Initialize();
-                    if (ModSceneManager.IsInMenu())
-                    {
-                        Plugin.log.LogInfo("entered if");
-                        switch (window)
-                        {
-                            case GUIWindow.Main:
-                                Plugin.log.LogInfo("match main");    
-                                RenderMain();
-                                break;
-                            case GUIWindow.Host:
-                            Plugin.log.LogInfo("match host");
-                                RenderHost();
-                                break;
-                            case GUIWindow.Lobby:
-                            Plugin.log.LogInfo("match lobby");
-                                RenderLobby();
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        RenderLobby();
-                    }
+                case GUIWindow.Main:
+                    Plugin.log.LogInfo("match main");
+                    RenderMain();
+                    break;
+                case GUIWindow.Host:
+                    Plugin.log.LogInfo("match host");
+                    RenderHost();
+                    break;
+                case GUIWindow.Lobby:
+                    Plugin.log.LogInfo("match lobby");
+                    RenderLobby();
+                    break;
                 }
-                wasinitialized = true; 
+            }
+            else
+            {
+                RenderLobby();
             }
         }
+
 
         private void Initialize()
         {
