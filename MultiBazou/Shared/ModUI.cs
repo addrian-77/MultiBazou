@@ -55,7 +55,7 @@ namespace MultiBazou.Shared
             wasinitialized = true;
         }
 
-        if (ModSceneManager.IsInMenu())
+        if (ShouldRenderLobby())
         {
             Plugin.log.LogInfo("entered if");
             switch (window)
@@ -80,6 +80,11 @@ namespace MultiBazou.Shared
             }
         }
 
+        private bool ShouldRenderLobby()
+        {
+            return ModSceneManager.IsInMenu() ||
+                    (ModSceneManager.IsInGame() && (Client.instance.isConnected || ServerData.isRunning));
+        }
 
         private void Initialize()
         {

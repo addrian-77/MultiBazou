@@ -13,7 +13,8 @@ namespace MultiBazou.ClientSide.Transport
 
         public void Connect(int localPort)
         {
-            Socket = new UdpClient();
+            Socket = new UdpClient(0);
+
             try
             {
                 EndPoint = new IPEndPoint(IPAddress.Parse(Client.instance.ip), Client.instance.port);

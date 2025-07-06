@@ -51,6 +51,15 @@ namespace MultiBazou.ServerSide.Handle
             {
                 ServerSend.DisconnectClient(fromClient, "You can't connect to an unready game!");
             }
+
+            
+            ServerSend.SendPlayersUpdateInDictionary(ServerData.Players);
+
+
+            ServerSend.SendPlayerUpdateInDictionary(ServerData.Players[fromClient]);
+
+            Plugin.log.LogInfo($"[NET] Player {username} joined (ID: {fromClient})");
+
         }
 
         public static void Disconnect(int fromClient, Packet packet)

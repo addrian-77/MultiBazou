@@ -47,7 +47,13 @@ namespace MultiBazou.ServerSide
 
             Application.runInBackground = true;
 
-            Client.instance.ConnectToServer("127.0.0.1");
+            ServerData.Players.Clear();
+            var hostPlayer = new Player(1, "Host", Vector3.zero);
+            ServerData.Players[1] = hostPlayer;
+
+
+            CoroutineHelper.Instance.StartRoutine(DelayedHostJoin());
+
         }
 
         public static void Stop()
@@ -116,7 +122,7 @@ namespace MultiBazou.ServerSide
 
                 using var packet = new Packet(data);
                 var clientId = packet.ReadInt();
-                
+
                 if (clientId == 0)
                     return;
 
@@ -175,5 +181,11 @@ namespace MultiBazou.ServerSide
                 { (int)PacketTypes.PlayerSceneChange, ServerHandle.PlayerSceneChange },
             };
         }
+        private static IEnumerator DelayedHostJoin()
+        {
+            yield return new WaitForSeconds(0.5f);
+            Client.instance.ConnectToServer("127.0.0.1");
+        }
+
     }
 }

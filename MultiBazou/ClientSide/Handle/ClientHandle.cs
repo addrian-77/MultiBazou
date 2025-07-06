@@ -73,13 +73,25 @@ namespace MultiBazou.ClientSide.Handle
             packet.Dispose();
         }
 
-        public static void UpdatePlayersInDictionary(Packet packet)
+       public static void UpdatePlayersInDictionary(Packet packet)
         {
             var list = packet.Read<Dictionary<int, Player>>();
             if (list != null)
-                ClientData.instance.Players = list;
+        {
+            ClientData.instance.Players = list;
+
+            foreach (var player in list.Values)
+            {
+                if (player.GameObject == null && player.scene == GameScene.Menu)
+                {
+                    ClientData.instance.SetupPlayerGameObject(player);
+                }
+            }
+        }   
+
             packet.Dispose();
         }
+
 
         public static void StartGame(Packet packet)
         {
