@@ -16,6 +16,7 @@ namespace MultiBazou.Shared
         public static ModUI Instance;
 
         public bool showModUI;
+        public bool wasinitialized = true;
         public GUIWindow window;
         private GUIStyle label_S, text_S, button_S, textField_S;
         
@@ -39,28 +40,42 @@ namespace MultiBazou.Shared
 
         public void OnGUI()
         {
-            if (showModUI)
+            if (!wasinitialized)
             {
-                Initialize();
-                if (ModSceneManager.IsInMenu())
+                Plugin.log.LogInfo("reached modui");
+                Plugin.log.LogInfo("modui bool value is " + Instance.showModUI);
+                Plugin.log.LogInfo("attempt to change showmodui");
+                Instance.showModUI = true;
+                Plugin.log.LogInfo("modui bool value is " + Instance.showModUI);
+                
+                if (showModUI)
                 {
-                    switch (window)
+                    Initialize();
+                    if (ModSceneManager.IsInMenu())
                     {
-                        case GUIWindow.Main:
-                            RenderMain();
-                            break;
-                        case GUIWindow.Host:
-                            RenderHost();
-                            break;
-                        case GUIWindow.Lobby:
-                            RenderLobby();
-                            break;
+                        Plugin.log.LogInfo("entered if");
+                        switch (window)
+                        {
+                            case GUIWindow.Main:
+                                Plugin.log.LogInfo("match main");    
+                                RenderMain();
+                                break;
+                            case GUIWindow.Host:
+                            Plugin.log.LogInfo("match host");
+                                RenderHost();
+                                break;
+                            case GUIWindow.Lobby:
+                            Plugin.log.LogInfo("match lobby");
+                                RenderLobby();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        RenderLobby();
                     }
                 }
-                else
-                {
-                    RenderLobby();
-                }
+                wasinitialized = true; 
             }
         }
 
@@ -100,6 +115,7 @@ namespace MultiBazou.Shared
         
         private void RenderMain()
         {
+            Plugin.log.LogInfo("reached rendermain");
             GUILayout.BeginArea(mRect, GUI.skin.box);
             
             GUILayout.BeginHorizontal();

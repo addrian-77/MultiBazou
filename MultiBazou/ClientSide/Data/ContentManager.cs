@@ -7,8 +7,6 @@ namespace MultiBazou.ClientSide.Data
     {
         public float GameVersion { get; private set; }
 
-        public string GameVersionString { get; private set; }
-
         public static ContentManager instance;
 
         public void Initialize()
@@ -27,11 +25,7 @@ namespace MultiBazou.ClientSide.Data
 
         private void GetGameVersion()
         {
-            string versionStr = Application.version;
-            if (Version.TryParse(versionStr, out var parsed))
-            {
-                GameVersion = parsed.Major + parsed.Minor / 10f;
-            }
+            GameVersion = (float)Convert.ToDouble(Application.version);
         }
     }
 }

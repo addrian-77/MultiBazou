@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Security.Policy;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -26,6 +28,8 @@ namespace MultiBazou
         public GameObject multiplayerGameObject;
 
         public bool isModInitialized;
+
+        public bool GuiInitialized = false;
         public static ManualLogSource log;
 
         void Awake()
@@ -50,14 +54,17 @@ namespace MultiBazou
 
             PreferencesManager.LoadPreferences();
             isModInitialized = true;
-            log.LogInfo(PluginInfo.Name + " has been initialized.");
+            contentManager.Initialize();
+            log.LogInfo(PluginInfo.Name + " has been initialized, your game version is " + contentManager.GameVersion);
         }
 
         private void OnSceneWasLoaded(Scene previousScene, Scene newScene)
         {
+            log.LogInfo("scene loaded");
+            // OnGUI();
             if (newScene.name == SceneNames.MainMenu) contentManager.Initialize();
             if (!isModInitialized) return;
-
+            
             if (client.isConnected || ServerData.isRunning)
             {
                 GameData.dataInitialized = false;
@@ -130,10 +137,20 @@ namespace MultiBazou
         private void OnGUI()
         {
             if (!isModInitialized && !Client.instance.isConnected) return;
-            if (Event.current.Equals(Event.KeyboardEvent(ConfigModUiToggle.Value)))
-                ModUI.Instance.showModUI = !ModUI.Instance.showModUI;
-
-            modUI.OnGUI();
+            if (!ModSceneManager.IsInMenu())
+            {
+                log.LogInfo("not in menu");
+                return;
+            }
+            if (!GuiInitialized)
+            {
+                if (Event.current.Equals(Event.KeyboardEvent(ConfigModUiToggle.Value)))
+                    ModUI.Instance.showModUI = !ModUI.Instance.showModUI;
+                log.LogInfo("attempted to show UI " + ModUI.Instance.showModUI + " bool value");
+                ModUI.Instance.wasinitialized = false;
+                modUI.OnGUI();
+                GuiInitialized = true;
+            }
         }
     }
 }
