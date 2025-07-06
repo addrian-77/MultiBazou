@@ -162,6 +162,8 @@ namespace MultiBazou.ServerSide
 
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
+                { (int)PacketTypes.ItemPickup, ServerHandle.ItemPickup },
+                { (int)PacketTypes.ItemDrop, ServerHandle.ItemDrop },
                 { (int)PacketTypes.Empty, ServerHandle.Empty },
                 { (int)PacketTypes.Welcome, ServerHandle.WelcomeReceived },
                 { (int)PacketTypes.ReadyState, ServerHandle.ReadyState },

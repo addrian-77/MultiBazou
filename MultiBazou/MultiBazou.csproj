@@ -70,6 +70,10 @@
     <Compile Include="Shared\SavesManager.cs" />
     <Compile Include="Shared\SceneNames.cs" />
     <Compile Include="ThreadManager.cs" />
+    <Compile Include="Shared\Data\Item.cs" />
+    <Compile Include="ServerSide\ItemManager.cs" />
+    <Compile Include="ClientSide\Data\ItemSyncProxy.cs" />
+    <Compile Include="ClientSide\Data\ItemInteractor.cs" />
   </ItemGroup>
   <PropertyGroup>
     <!-- Change this variable accordingly!! -->

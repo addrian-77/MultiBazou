@@ -12,6 +12,10 @@ namespace MultiBazou.Shared
         UpdatePlayerInDictionary,
         StartGame,
         SpawnPlayer,
+        ItemSpawn,
+        ItemUpdate,
+        ItemPickup,
+        ItemDrop,
 
         #endregion
 

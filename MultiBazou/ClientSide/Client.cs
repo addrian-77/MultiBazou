@@ -78,6 +78,8 @@ namespace MultiBazou.ClientSide
         {
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
+                { (int)PacketTypes.ItemSpawn, ClientHandle.ItemSpawn },
+                { (int)PacketTypes.ItemUpdate, ClientHandle.ItemUpdate },
                 { (int)PacketTypes.Welcome, ClientHandle.Welcome },
                 { (int)PacketTypes.Disconnect, ClientHandle.Disconnect },
                 { (int)PacketTypes.ReadyState, ClientHandle.ReadyState },

@@ -51,17 +51,33 @@ namespace MultiBazou.ClientSide.Handle
                     
             SendTcpData(packet);
         }
+        
+        public static void SendItemPickup(int itemId)
+        {
+            using var packet = new Packet((int)PacketTypes.ItemPickup);
+            packet.Write(itemId);
+            SendTcpData(packet);
+        }
+
+        public static void SendItemDrop(int itemId, Vector3Serializable position)
+        {
+            using var packet = new Packet((int)PacketTypes.ItemDrop);
+            packet.Write(itemId);
+            packet.Write(position);
+            SendTcpData(packet);
+        }
+
         #endregion
 
 
         #region PlayerData
-        
-            public static void SendInitialPosition(Vector3Serializable position)
-            {
-                using var packet = new Packet((int)PacketTypes.PlayerInitialPos);
-                packet.Write(position);
-                SendUdpData(packet);
-            }
+
+        public static void SendInitialPosition(Vector3Serializable position)
+        {
+            using var packet = new Packet((int)PacketTypes.PlayerInitialPos);
+            packet.Write(position);
+            SendUdpData(packet);
+        }
             
             public static void SendPosition(Vector3Serializable position)
             {

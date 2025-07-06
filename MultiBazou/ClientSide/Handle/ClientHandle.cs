@@ -17,7 +17,7 @@ namespace MultiBazou.ClientSide.Handle
         {
             var msg = packet.ReadString();
             var myId = packet.ReadInt();
-            
+
             Client.instance.Id = myId;
 
             ClientSend.WelcomeReceived();
@@ -69,7 +69,7 @@ namespace MultiBazou.ClientSide.Handle
         {
             var info = packet.Read<Player>();
             ClientData.instance.Players[info.id] = info;
-            
+
             packet.Dispose();
         }
 
@@ -187,6 +187,41 @@ namespace MultiBazou.ClientSide.Handle
             packet.Dispose();
         }
 
+        #endregion
+
+        #region ItemSync
+
+        public static void ItemSpawn(Packet packet)
+        {
+            Item item = packet.Read<Item>();
+            GameObject proxy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            proxy.transform.position = item.position.ToVector3();
+            proxy.transform.localScale = Vector3.one * 0.3f;
+            proxy.name = $"Item_{item.id}_{item.type}";
+
+            var sync = proxy.AddComponent<ItemSyncProxy>();
+            sync.itemId = item.id;
+        }
+
+        public static void ItemUpdate(Packet packet)
+        {
+            Item item = packet.Read<Item>();
+            var proxy = GameObject.Find($"Item_{item.id}_{item.type}");
+            if (proxy == null) return;
+
+            var sync = proxy.GetComponent<ItemSyncProxy>();
+            if (sync == null) return;
+
+            if (item.ownerId.HasValue)
+            {
+                sync.OnPickedUp();
+            }
+            else
+            {
+                sync.OnDropped(item.position.ToVector3());
+            }
+        }
+        
         #endregion
     }
 }

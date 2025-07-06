@@ -103,7 +103,7 @@ namespace MultiBazou
         {
             if (!isModInitialized) return;
 
-            if (Input.GetKeyDown(KeyCode.End))
+            if (Input.GetKeyDown(KeyCode.Insert))
             {
                 if (ModUI.Instance != null)
                 {

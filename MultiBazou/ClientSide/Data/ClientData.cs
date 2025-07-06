@@ -54,6 +54,11 @@ namespace MultiBazou.ClientSide.Data
                 playerObject.transform.name = player.username;
 
                 player.GameObject = playerObject;
+
+                if (player.id == Client.instance.Id)
+                {
+                    playerObject.AddComponent<ItemInteractor>();
+                }
             }
             else
             {
